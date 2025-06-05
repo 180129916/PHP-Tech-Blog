@@ -1,0 +1,98 @@
+{% extends "frontend/layouts/app.twig" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            {% for post in posts %}
+            <article class="card mb-4">
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image }}" class="card-img-top" alt="{{ post.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h2 class="card-title">
+                        <a href="/post/{{ post.slug }}" class="text-decoration-none text-dark">
+                            {{ post.title }}
+                        </a>
+                    </h2>
+                    <p class="card-text text-muted">
+                        <small>
+                            By {{ post.user.username }} in {{ post.category.name }} | 
+                            {{ post.created_at|date("F j, Y") }}
+                        </small>
+                    </p>
+                    <p class="card-text">{{ post.excerpt }}</p>
+                    <a href="/post/{{ post.slug }}" class="btn btn-primary">Read More</a>
+                </div>
+            </article>
+            {% endfor %}
+
+            {% if posts.hasPages() %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if posts.onFirstPage() %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ posts.previousPageUrl() }}">Previous</a>
+                    </li>
+                    {% endif %}
+
+                    {% for page in posts.getUrlRange(1, posts.lastPage()) %}
+                    <li class="page-item {{ posts.currentPage() == loop.index ? 'active' : '' }}">
+                        <a class="page-link" href="{{ page }}">{{ loop.index }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if posts.hasMorePages() %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ posts.nextPageUrl() }}">Next</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Categories</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        {% for category in categories %}
+                        <li class="mb-2">
+                            <a href="/category/{{ category.slug }}" class="text-decoration-none">
+                                {{ category.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Tags</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for tag in tags %}
+                        <a href="/tag/{{ tag.slug }}" class="badge bg-primary text-decoration-none">
+                            {{ tag.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
