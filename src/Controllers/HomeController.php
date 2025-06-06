@@ -13,7 +13,8 @@ class HomeController extends Controller
         $posts = Post::with(['user', 'category'])
             ->published()
             ->latest()
-            ->paginate(10);
+            ->take(10)
+            ->get();
 
         return $this->view($response, 'frontend/home.twig', [
             'posts' => $posts,

@@ -4,6 +4,10 @@ use Slim\Routing\RouteCollectorProxy;
 use App\Controllers\HomeController;
 use App\Controllers\PostController;
 use App\Controllers\AdminController;
+use App\Controllers\TestController;
+
+// Test route
+$app->get('/test', [TestController::class, 'index']);
 
 // Frontend routes
 $app->group('', function (RouteCollectorProxy $group) {
